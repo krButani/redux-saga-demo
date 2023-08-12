@@ -1,14 +1,14 @@
 # Redux With Saga Demo
 
 
-## Installtion Setep
+## Installtion Step
 
 * 1. Install React Application npx create-next-app@letest
 * 2. Install Redux and Saga npm install redux react-redux redux-saga
 
 
 
-# takeLatest and takeEvery Diffrences.
+## takeLatest and takeEvery Diffrences.
 
 ```
 takeEvery:
