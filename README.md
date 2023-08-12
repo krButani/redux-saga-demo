@@ -3,10 +3,82 @@
 
 ## Installtion Step
 
-* 1. Install React Application npx create-next-app@letest
-* 2. Install Redux and Saga npm install redux react-redux redux-saga
+1. Install React Application npx create-next-app@letest
+2. Install Redux and Saga npm install redux react-redux redux-saga
 
 
+## Setup Project folders and files
+
+1. Create ./store folder 
+2. inside create store/action, store/reducer, store/saga, store/services, store/types folders
+3. create file store/store.js
+4. create file store/reducer/rootReducer.js
+5. create file store/saga/sagaMiddleware.js
+6. create file store/services/config.js
+7. other folder you need to create file according you need like if you have post curd than create respective files 
+    * /store/action/postAction.js
+    * /store/reducer/postReducer.js
+    * /store/saga/postSaga.js
+    * /store/types/postTypes.js
+    * /store/services/postServices.js
+
+
+## Write Basic Code to Configure Store
+
+1. first configure rootReducer (store/reducer/rootReducer.js)
+    
+```
+import { combineReducers } from "redux";
+import { postReducer } from "./postReducer";
+
+export default combineReducers({
+  postReducer
+});
+
+```
+- here we take example of post reducer only. May be you have multiple reducer so you can import all reducer and put inside like this `combineReducers({ postReducer, yourReducure1, yourReducure2.... })`
+
+2. Now Configure sagaMiddleware (store/saga/sagamiddleware.js)
+
+```
+import postWatcher from "./postSaga";
+import createSagaMiddleware from "redux-saga";
+
+export const sagaMiddleware = createSagaMiddleware();
+export function* rootSaga() {
+  yield all([
+    fork(postWatcher),
+  ]);
+}
+```
+
+- here you can import postWatcher from store/saga/postSaga.js and put inside rootSaga. If you have more `Watcher` than you add like this `yield all([
+    fork(postWatcher),
+    fork(yourWatcher1),
+    fork(yourWatcher2),
+  ])`
+
+
+3. Now finally configure store (store/store.js)
+
+```
+// import {createStore} from 'redux'
+import { configureStore } from "@reduxjs/toolkit";
+import rootReducer from "./reducer/rootReducer";
+
+import { sagaMiddleware, rootSaga } from "./saga/sagaMiddleware";
+
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: () => [sagaMiddleware]
+});
+
+sagaMiddleware.run(rootSaga);
+
+export default store;
+```
+
+- Never change this store.js file its perfectly configure.
 
 ## takeLatest and takeEvery Diffrences.
 
